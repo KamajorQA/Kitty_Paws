@@ -1,6 +1,7 @@
 import { Layout } from 'antd';
 
 import { TitleComponent } from '../components/Title';
+import { CatsTable } from '../components/CatsTable';
 const { Content } = Layout;
 
 function HomePage() {
@@ -13,7 +14,7 @@ function HomePage() {
       <TitleComponent level={2}>Cats list</TitleComponent>
 
       <section className="flexCenter contentWrapper">
-        Content placed here lorem100*10
+        <CatsTable />
       </section>
     </Content>
   );

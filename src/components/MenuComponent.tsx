@@ -5,12 +5,9 @@ import { BiSearchAlt } from 'react-icons/bi';
 import { FaPaw } from 'react-icons/fa';
 
 import { useControlNavigation } from '../hooks/useControlNavigation';
-// import { SiderContext } from '../context/SiderContext';
 
 function MenuComponent() {
   const { highlightActiveLink, goToChosenPage } = useControlNavigation();
-
-  // const { collapsed } = useContext(SiderContext);
 
   return (
     <Menu

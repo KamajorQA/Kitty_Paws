@@ -20,6 +20,8 @@ root.render(
           borderRadius: 16,
           fontFamily: 'Caveat',
           fontSize: 16,
+          colorBorder: '#f7ca2f',
+          colorPrimaryHover: '#818cf880',
         },
       }}
     >
