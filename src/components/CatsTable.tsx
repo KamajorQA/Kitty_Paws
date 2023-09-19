@@ -1,168 +1,32 @@
-import { useState } from 'react';
-import { Table, Button, Space, Image, Typography, theme } from 'antd';
-import { BiCopy } from 'react-icons/bi';
-import { BiSolidCopy } from 'react-icons/bi';
+import { Button, Table } from 'antd';
 
-import { kittens } from '../assets/kittensData';
-
-import type { TableProps } from 'antd';
-import type { ColumnsType, SorterResult } from 'antd/es/table/interface';
-
-interface IKittensData {
-  key?: React.Key;
-  charm: number;
-  id: number;
-  title: string;
-  image: string;
-  author: {
-    uid: number;
-    name: string;
-  };
-  likes: number[];
-  description: string;
-  brief: string;
-}
+import { useControlTable } from '../hooks/useControlTable';
 
 function CatsTable() {
   const {
-    token: { colorPrimaryHover, colorBgLayout },
-  } = theme.useToken();
-
-  const arrangedKittensData: IKittensData[] = kittens.map((e) => ({
-    ...e,
-    authorName: e.author.name,
-    charm: e.likes.length,
-  }));
-
-  const [sortedInfo, setSortedInfo] = useState<SorterResult<IKittensData>>({});
-
-  const handleChange: TableProps<IKittensData>['onChange'] = (
-    pagination,
-    filters,
-    sorter
-  ) => {
-    setSortedInfo(sorter as SorterResult<IKittensData>);
-  };
-
-  const clearCharmSort = () => {
-    setSortedInfo({});
-  };
-
-  const setCharmSort = () => {
-    setSortedInfo({
-      order: 'descend',
-      columnKey: 'charm',
-    });
-  };
-
-  const columns: ColumnsType<IKittensData> = [
-    {
-      title: "Kitty's Name",
-      dataIndex: 'title',
-      key: 'name',
-      render: (text, row) => (
-        <Typography.Text
-          strong
-          onClick={() => alert(`${row.id}`)}
-          style={{
-            cursor: 'pointer',
-          }}
-        >
-          {text}
-        </Typography.Text>
-      ),
-    },
-
-    {
-      title: 'Characteristics',
-      dataIndex: 'brief',
-      key: 'brief',
-      render: (text) => (
-        <Typography.Text
-          copyable={{
-            icon: [
-              <BiCopy
-                style={{
-                  color: colorBgLayout,
-                }}
-              />,
-              <BiSolidCopy
-                style={{
-                  color: colorPrimaryHover,
-                }}
-              />,
-            ],
-          }}
-        >
-          {text}
-        </Typography.Text>
-      ),
-      responsive: ['lg'],
-    },
-
-    {
-      title: 'Post author',
-      dataIndex: 'authorName',
-      key: 'author',
-      responsive: ['xl'],
-    },
-    {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      render: (text) => (
-        <Typography.Paragraph
-          ellipsis={{ tooltip: 'Full info is in detailed Bio' }}
-          style={{
-            width: 100,
-            margin: 0,
-          }}
-        >
-          {text}
-        </Typography.Paragraph>
-      ),
-      responsive: ['lg'],
-    },
-    {
-      title: 'Alert',
-      key: 'action',
-      render: (_, row) => (
-        <Button onClick={() => alert(`${row.id}`)}>Alert</Button>
-      ),
-      responsive: ['xs', 'sm'],
-    },
-
-    {
-      title: 'Charm',
-      dataIndex: 'charm',
-      key: 'charm',
-      sorter: (a, b) => a.charm - b.charm,
-      sortDirections: ['descend', 'ascend'],
-      sortOrder: sortedInfo.columnKey === 'charm' ? sortedInfo.order : null,
-
-      responsive: ['md'],
-    },
-
-    {
-      title: 'Image',
-      dataIndex: 'image',
-      key: 'image',
-      render: (src) => <Image src={src} width={150} />,
-      responsive: ['sm'],
-    },
-  ];
+    setCharmSort,
+    clearCharmSort,
+    handleTableChange,
+    columns,
+    arrangedKittensData,
+  } = useControlTable();
 
   return (
     <>
-      {/* <Space style={{ marginBottom: 16 }}> */}
-      <Button onClick={setCharmSort}>Sort by popularity</Button>
-      <Button onClick={clearCharmSort}>Clear sorter</Button>
-      {/* </Space> */}
+      <article className="flexCenter mobileAdaptive tableControls">
+        <Button onClick={setCharmSort}>Sort by popularity</Button>
+        <Button onClick={clearCharmSort}>Clear sorter</Button>
+      </article>
       <Table
         columns={columns}
         dataSource={arrangedKittensData}
-        onChange={handleChange}
+        onChange={handleTableChange}
         rowKey="id"
+        pagination={{
+          position: ['bottomCenter'],
+          hideOnSinglePage: true,
+          pageSize: 3,
+        }}
       />
     </>
   );

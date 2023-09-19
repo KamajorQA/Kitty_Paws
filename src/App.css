@@ -13,6 +13,11 @@
   min-height: 70vmin;
 }
 
+.tableControls {
+  margin: 1rem 0 1.5rem 0;
+  gap: 1rem;
+}
+
 .contactsList {
   flex-direction: column;
   gap: 0.8rem;
@@ -32,4 +37,15 @@
 
 .socialIcon {
   max-height: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .mobileAdaptive {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tableControls {
+    display: none;
+  }
 }
