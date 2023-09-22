@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
 
+import { store } from './store';
 import App from './App';
 import './index.css';
 import { SiderContextProvider } from './context/SiderContext';
@@ -26,7 +28,9 @@ root.render(
       }}
     >
       <SiderContextProvider>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </SiderContextProvider>
     </ConfigProvider>
   </React.StrictMode>
