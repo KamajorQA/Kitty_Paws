@@ -18,6 +18,8 @@ npm install
 npm start
 ```
 
+### **_Важно!_** Ключи (переменные) для настройки окружения и конфигурации firebase хранятся локально и отсутствуют в репозитории. Необходим файл .env.local
+
 ## В проекте настроен CI/CD через GitHub Actions.
 
 ![kitty status badge](https://github.com/KamajorQA/Kitty_Paws/actions/workflows/github-actions-kitty-paws.yml/badge.svg)
@@ -42,13 +44,14 @@ npm run lint:fix
 ## В проекте использованы библиотеки
 
 - [x] Typescript;
+- [x] Firebase;
 - [x] Redux Toolkit;
 - [x] React Router;
 - [x] Ant Design;
 - [x] react-icons;
 - [x] prettier;
 
-React Router использован для навигации между страницами **Home** / **Contacts** / **Not Found**
+React Router использован для навигации между страницами **Home** / **Contacts** / **Login** / **Not Found**
 Рендер вложенных страниц реализован через компонент `<Outlet />` библиотеки `react-router-dom`
 
 Работа с **SVG** организована и с использованием иконок библиотеки `react-icons`, и с использованием локальных файлов из директории `assets/icons`.
