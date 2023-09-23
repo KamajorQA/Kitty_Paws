@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button, Layout } from 'antd';
 import { signInWithPopup } from 'firebase/auth';
@@ -7,10 +6,11 @@ import { auth, provider } from '../firebase';
 
 import { setUser } from '../store/slices/userSlice';
 import { TitleComponent } from '../components/Title';
+import { useAppDispatch } from '../hooks/reduxHooks';
 const { Content } = Layout;
 
 function LoginPage() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
 
