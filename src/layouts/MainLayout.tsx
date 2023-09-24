@@ -1,22 +1,33 @@
 import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
 
+import { useAuth } from '../hooks/useAuth';
 import { SiderComponent } from '../components/SiderComponent';
 import { HeaderComponent } from '../components/HeaderComponent';
+import { Loader } from '../components/Loader';
 
 function MainLayout() {
+  const isLoading = useAuth();
+
   return (
     <Layout
       style={{
         minHeight: '100vh',
       }}
     >
-      <Layout>
-        <HeaderComponent />
-        <Outlet />
-      </Layout>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <Layout>
+            <HeaderComponent />
 
-      <SiderComponent />
+            <Outlet />
+          </Layout>
+
+          <SiderComponent />
+        </>
+      )}
     </Layout>
   );
 }

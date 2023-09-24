@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 import { ConfigProvider } from 'antd';
 
+import { SiderContextProvider } from './context/SiderContext';
+import { store } from './store';
 import App from './App';
 import './index.css';
-import { SiderContextProvider } from './context/SiderContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -26,7 +28,9 @@ root.render(
       }}
     >
       <SiderContextProvider>
-        <App />
+        <Provider store={store}>
+          <App />
+        </Provider>
       </SiderContextProvider>
     </ConfigProvider>
   </React.StrictMode>
