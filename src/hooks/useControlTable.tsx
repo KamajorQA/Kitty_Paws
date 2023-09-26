@@ -3,28 +3,20 @@ import { Button, Image, Typography, theme } from 'antd';
 import { BiCopy } from 'react-icons/bi';
 import { BiSolidCopy } from 'react-icons/bi';
 
-import { kittens } from '../assets/kittensData';
-import { IKittensData } from '../models/data';
+import { IKittensDataArranged } from '../models/data';
+
+import { catsApi } from '../store/services/catsApi';
 
 import type { TableProps } from 'antd';
 import type { ColumnsType, SorterResult } from 'antd/es/table/interface';
-
-export interface IKittensDataArranged extends IKittensData {
-  key?: React.Key;
-  authorName: string;
-  charm: number;
-}
 
 function useControlTable() {
   const {
     token: { colorPrimaryHover, colorBgLayout },
   } = theme.useToken();
 
-  const arrangedKittensData: IKittensDataArranged[] = kittens.map((e) => ({
-    ...e,
-    authorName: e.author.name,
-    charm: e.likes.length,
-  }));
+  const { data, isSuccess, isError, isLoading, refetch } =
+    catsApi.useFetchCatsQuery();
 
   const [sortedInfo, setSortedInfo] = useState<
     SorterResult<IKittensDataArranged>
@@ -150,7 +142,11 @@ function useControlTable() {
     clearCharmSort,
     handleTableChange,
     columns,
-    arrangedKittensData,
+    data,
+    isSuccess,
+    isError,
+    isLoading,
+    refetch,
   };
 }
 

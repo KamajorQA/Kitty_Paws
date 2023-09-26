@@ -1,15 +1,11 @@
 import { Button, Table } from 'antd';
 
 import { useControlTable } from '../hooks/useControlTable';
+import { IKittensDataArranged } from '../models/data';
 
 function CatsTable() {
-  const {
-    setCharmSort,
-    clearCharmSort,
-    handleTableChange,
-    columns,
-    arrangedKittensData,
-  } = useControlTable();
+  const { setCharmSort, clearCharmSort, handleTableChange, columns, data } =
+    useControlTable();
 
   return (
     <>
@@ -19,7 +15,7 @@ function CatsTable() {
       </article>
       <Table
         columns={columns}
-        dataSource={arrangedKittensData}
+        dataSource={data as IKittensDataArranged[]}
         onChange={handleTableChange}
         rowKey="id"
         pagination={{
