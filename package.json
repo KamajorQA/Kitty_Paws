@@ -11,6 +11,7 @@
     "@types/node": "^16.18.52",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
+    "@types/react-redux": "^7.1.26",
     "antd": "^5.9.1",
     "firebase": "^10.4.0",
     "react": "^18.2.0",

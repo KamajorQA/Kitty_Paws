@@ -1,14 +1,20 @@
 interface IKittensData {
-  id: number;
+  id: string;
   title: string;
   image: string;
   author: {
-    uid: number;
+    uid: string;
     name: string;
   };
-  likes: number[];
+  likes: string[];
   description: string;
   brief: string;
 }
 
-export type { IKittensData };
+interface IKittensDataArranged extends IKittensData {
+  key: React.Key;
+  authorName: string;
+  charm: number;
+}
+
+export type { IKittensData, IKittensDataArranged };

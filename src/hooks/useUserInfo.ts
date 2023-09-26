@@ -1,14 +1,14 @@
 import { useAppSelector } from './reduxHooks';
 
 function useUserInfo() {
-  const { email, displayName, id } = useAppSelector(
+  const { email, displayName, uid } = useAppSelector(
     (state) => state.userReducer
   );
 
   return {
     email,
     displayName,
-    id,
+    uid,
   };
 }
 
