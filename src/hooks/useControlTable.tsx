@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Image, Typography, theme } from 'antd';
 import { BiCopy } from 'react-icons/bi';
 import { BiSolidCopy } from 'react-icons/bi';
@@ -21,6 +22,8 @@ function useControlTable() {
   const [sortedInfo, setSortedInfo] = useState<
     SorterResult<IKittensDataArranged>
   >({});
+
+  const navigate = useNavigate();
 
   const handleTableChange: TableProps<IKittensDataArranged>['onChange'] = (
     pagination,
@@ -49,7 +52,7 @@ function useControlTable() {
       render: (text, row) => (
         <Typography.Text
           strong
-          onClick={() => alert(`${row.id}`)}
+          onClick={() => navigate(`cats/${row.id}`)}
           style={{
             cursor: 'pointer',
           }}
@@ -110,10 +113,10 @@ function useControlTable() {
       responsive: ['lg'],
     },
     {
-      title: 'Alert',
+      title: 'Show Bio',
       key: 'action',
       render: (_, row) => (
-        <Button onClick={() => alert(`${row.id}`)}>Alert</Button>
+        <Button onClick={() => navigate(`cats/${row.id}`)}>Details</Button>
       ),
       responsive: ['xs', 'sm'],
     },

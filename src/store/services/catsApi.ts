@@ -53,7 +53,11 @@ export const catsApi = createApi({
         try {
           const catDocRef = doc(db, 'cats', id);
           const catSnapshot = await getDoc(catDocRef);
-          return { data: catSnapshot.data() as IKittensData };
+          const signleCat = {
+            id: catSnapshot.id,
+            ...catSnapshot.data(),
+          };
+          return { data: signleCat as IKittensData };
         } catch (error) {
           return { error };
         }
