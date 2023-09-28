@@ -3,40 +3,21 @@ import { FcLikePlaceholder } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
 
 import { IKittensDataArranged } from '../models/data';
-import { useUpdateCatLikeMutation } from '../store/services/catsApi';
-
 import { useUserInfo } from '../hooks/useUserInfo';
+import { useLike } from '../hooks/useLike';
 
 interface ILikeBtnProps {
   catInstance: IKittensDataArranged;
 }
 
 function LikeButton({ catInstance }: ILikeBtnProps) {
-  const [updateCatLike, { isLoading }] = useUpdateCatLikeMutation();
-
   const { uid } = useUserInfo();
 
-  const isLiked = catInstance?.likes?.includes(uid) ? true : false;
+  const isLiked = !!catInstance?.likes?.includes(uid);
 
-  const likeIt = (catInstance: IKittensDataArranged) => {
-    const likedArr = [...catInstance.likes, uid];
-    updateCatLike({
-      id: catInstance.id,
-      catData: { likes: likedArr },
-    }).unwrap();
-  };
-
-  const dislikeIt = (catInstance: IKittensDataArranged) => {
-    const unlikedArr = catInstance.likes.filter((el) => el !== uid);
-    updateCatLike({
-      id: catInstance.id,
-      catData: { likes: unlikedArr },
-    }).unwrap();
-  };
+  const { handleLike, isLoading } = useLike(isLiked);
 
   const likeIcon = isLiked ? <FcLike /> : <FcLikePlaceholder />;
-
-  const handleLike = isLiked ? dislikeIt : likeIt;
 
   return (
     <Button

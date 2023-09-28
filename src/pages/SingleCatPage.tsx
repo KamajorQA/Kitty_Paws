@@ -5,13 +5,11 @@ import { Button, Image } from 'antd';
 import { FcLikePlaceholder } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
 
-import {
-  useFetchSingleCatQuery,
-  useUpdateCatLikeMutation,
-} from '../store/services/catsApi';
+import { useFetchSingleCatQuery } from '../store/services/catsApi';
 import { useUserInfo } from '../hooks/useUserInfo';
 import { TitleComponent } from '../components/Title';
 import { Loader } from '../components/Loader';
+import { useLike } from '../hooks/useLike';
 
 import { NotFoundPage } from './NotFoundPage';
 
@@ -19,30 +17,20 @@ function SingleCatPage() {
   const { uid } = useUserInfo();
   const { catId } = useParams<{ catId: string }>();
 
-  const [updateCatLike] = useUpdateCatLikeMutation();
-
   const { data, isLoading, isError } = useFetchSingleCatQuery(catId as string);
-  const [isFavorite, setIsFavorite] = useState(data?.likes?.includes(uid));
+  const [isFavorite, setIsFavorite] = useState<boolean | undefined>(false);
 
   useEffect(() => {
-    setIsFavorite(data?.likes?.includes(uid));
+    setIsFavorite(data?.likes?.includes(uid)); // стейт зависит от внешнего запроса data,
+    // которое получается от сервера и изначально всегда undefined. Нужна их синхронизация.
     /* eslint-disable react-hooks/exhaustive-deps*/
   }, [data, isLoading]);
 
-  const likeIcon = isFavorite ? <FcLike /> : <FcLikePlaceholder />;
+  const { handleLike, isLoading: likeIsLoading } = useLike(
+    isFavorite as boolean
+  );
 
-  const handleUpdateLike = () => {
-    if (isFavorite) {
-      const unlikedArr = data?.likes?.filter((el) => el !== uid);
-      updateCatLike({
-        id: catId as string,
-        catData: { likes: unlikedArr as string[] },
-      });
-    } else if (data?.likes?.includes(uid) === false) {
-      const likedArr = [...data?.likes, uid];
-      updateCatLike({ id: catId as string, catData: { likes: likedArr } });
-    }
-  };
+  const likeIcon = isFavorite ? <FcLike /> : <FcLikePlaceholder />;
 
   return (
     <>
@@ -77,7 +65,8 @@ function SingleCatPage() {
                     top: 20,
                     right: 20,
                   }}
-                  onClick={handleUpdateLike}
+                  loading={likeIsLoading}
+                  onClick={() => handleLike(data)}
                 />
                 <h1>{data?.brief}</h1>
                 <Image
