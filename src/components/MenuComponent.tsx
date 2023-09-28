@@ -1,6 +1,7 @@
 import { Menu } from 'antd';
 import { RiContactsFill } from 'react-icons/ri';
-import { BiSearchAlt } from 'react-icons/bi';
+import { LuCat } from 'react-icons/lu';
+import { MdFavoriteBorder } from 'react-icons/md';
 import { FaPaw } from 'react-icons/fa';
 
 import { useControlNavigation } from '../hooks/useControlNavigation';
@@ -20,14 +21,19 @@ function MenuComponent() {
           icon: <FaPaw />,
         },
         {
+          key: 'favorites',
+          label: 'Favorites',
+          icon: <MdFavoriteBorder />,
+        },
+        {
+          key: 'newcat',
+          label: 'Add Your Cat',
+          icon: <LuCat />,
+        },
+        {
           key: 'contacts',
           label: 'Contacts',
           icon: <RiContactsFill />,
-        },
-        {
-          key: 'favorites',
-          label: 'Favorites',
-          icon: <BiSearchAlt />,
         },
       ]}
       onClick={goToChosenPage}

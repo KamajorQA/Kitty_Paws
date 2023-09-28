@@ -4,7 +4,7 @@ const { Title } = Typography;
 
 interface ITitle {
   level: 1 | 2 | 3 | 4 | 5 | undefined;
-  children: string | React.ReactNode;
+  children: React.ReactNode;
 }
 
 function TitleComponent({ level, children }: ITitle) {
