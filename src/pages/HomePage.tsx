@@ -14,7 +14,7 @@ function HomePage() {
       {isError && (
         <div className="flexCenter">
           <p>Ошибка при загрузке данных с сервера.</p>
-          <Button type="link" onClick={() => refetch()}>
+          <Button type="link" onClick={refetch}>
             Попробовать опять
           </Button>
         </div>

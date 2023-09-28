@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Image, Typography, theme } from 'antd';
 import { BiCopy } from 'react-icons/bi';
 import { BiSolidCopy } from 'react-icons/bi';
 
 import { IKittensDataArranged } from '../models/data';
-
 import { catsApi } from '../store/services/catsApi';
+import { LikeButton } from '../components/LikeButton';
 
 import type { TableProps } from 'antd';
 import type { ColumnsType, SorterResult } from 'antd/es/table/interface';
@@ -15,12 +16,13 @@ function useControlTable() {
     token: { colorPrimaryHover, colorBgLayout },
   } = theme.useToken();
 
-  const { data, isSuccess, isError, isLoading, refetch } =
-    catsApi.useFetchCatsQuery();
+  const { data, isError, isLoading, refetch } = catsApi.useFetchCatsQuery();
 
   const [sortedInfo, setSortedInfo] = useState<
     SorterResult<IKittensDataArranged>
   >({});
+
+  const navigate = useNavigate();
 
   const handleTableChange: TableProps<IKittensDataArranged>['onChange'] = (
     pagination,
@@ -49,7 +51,7 @@ function useControlTable() {
       render: (text, row) => (
         <Typography.Text
           strong
-          onClick={() => alert(`${row.id}`)}
+          onClick={() => navigate(`cats/${row.id}`)}
           style={{
             cursor: 'pointer',
           }}
@@ -110,10 +112,10 @@ function useControlTable() {
       responsive: ['lg'],
     },
     {
-      title: 'Alert',
-      key: 'action',
+      title: 'Show Bio',
+      key: 'bio',
       render: (_, row) => (
-        <Button onClick={() => alert(`${row.id}`)}>Alert</Button>
+        <Button onClick={() => navigate(`cats/${row.id}`)}>Details</Button>
       ),
       responsive: ['xs', 'sm'],
     },
@@ -135,6 +137,13 @@ function useControlTable() {
       render: (src) => <Image src={src} width={150} />,
       responsive: ['sm'],
     },
+
+    {
+      title: 'Like',
+      key: 'like',
+      render: (catInstance) => <LikeButton catInstance={catInstance} />,
+      responsive: ['xl'],
+    },
   ];
 
   return {
@@ -143,7 +152,6 @@ function useControlTable() {
     handleTableChange,
     columns,
     data,
-    isSuccess,
     isError,
     isLoading,
     refetch,

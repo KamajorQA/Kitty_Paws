@@ -18,7 +18,7 @@ function useAuth() {
         dispatch(
           setUser({
             email: user.email,
-            id: user.uid,
+            uid: user.uid,
             displayName: user.displayName,
           })
         );

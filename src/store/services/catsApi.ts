@@ -1,5 +1,5 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 
 import { db } from '../../firebase';
 import { IKittensData, IKittensDataArranged } from '../../models/data';
@@ -14,7 +14,7 @@ export const catsApi = createApi({
      * Получение списка всех котов в обработанном виде
      * @returns {array} Returns array of cats.
      */
-    fetchCats: builder.query<IKittensData[], void>({
+    fetchCats: builder.query<IKittensDataArranged[], void>({
       // а с fakeBaseQuery вместо простого получения query использую queryFn
       async queryFn() {
         const catsCollectionRef = collection(db, 'cats');
@@ -53,14 +53,37 @@ export const catsApi = createApi({
         try {
           const catDocRef = doc(db, 'cats', id);
           const catSnapshot = await getDoc(catDocRef);
-          return { data: catSnapshot.data() as IKittensData };
+          const signleCat = {
+            id: catSnapshot.id,
+            ...catSnapshot.data(),
+          };
+          return { data: signleCat as IKittensData };
         } catch (error) {
           return { error };
         }
       },
       providesTags: ['Cats'],
     }),
+    updateCatLike: builder.mutation<
+      string,
+      { id: string; catData: { likes: string[] } }
+    >({
+      async queryFn({ id, catData }) {
+        try {
+          const catDocRef = doc(db, 'cats', id);
+          await setDoc(catDocRef, catData, { merge: true });
+          return { data: 'ok' };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ['Cats'],
+    }),
   }),
 });
 
-export const { useFetchCatsQuery, useFetchSingleCatQuery } = catsApi;
+export const {
+  useFetchCatsQuery,
+  useFetchSingleCatQuery,
+  useUpdateCatLikeMutation,
+} = catsApi;
