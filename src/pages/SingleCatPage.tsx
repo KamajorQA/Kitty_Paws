@@ -1,23 +1,48 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Content } from 'antd/es/layout/layout';
 import { Button, Image } from 'antd';
 import { FcLikePlaceholder } from 'react-icons/fc';
 import { FcLike } from 'react-icons/fc';
 
-import { useFetchSingleCatQuery } from '../store/services/catsApi';
+import {
+  useFetchSingleCatQuery,
+  useUpdateCatLikeMutation,
+} from '../store/services/catsApi';
+import { useUserInfo } from '../hooks/useUserInfo';
 import { TitleComponent } from '../components/Title';
 import { Loader } from '../components/Loader';
 
 import { NotFoundPage } from './NotFoundPage';
 
 function SingleCatPage() {
-  const [isLiked, setIsLiked] = useState(false);
+  const { uid } = useUserInfo();
   const { catId } = useParams<{ catId: string }>();
 
-  const { data, isLoading, isError } = useFetchSingleCatQuery(catId as string);
+  const [updateCatLike] = useUpdateCatLikeMutation();
 
-  const likeIcon = isLiked ? <FcLike /> : <FcLikePlaceholder />;
+  const { data, isLoading, isError } = useFetchSingleCatQuery(catId as string);
+  const [isFavorite, setIsFavorite] = useState(data?.likes?.includes(uid));
+
+  useEffect(() => {
+    setIsFavorite(data?.likes?.includes(uid));
+    /* eslint-disable react-hooks/exhaustive-deps*/
+  }, [data, isLoading]);
+
+  const likeIcon = isFavorite ? <FcLike /> : <FcLikePlaceholder />;
+
+  const handleUpdateLike = () => {
+    if (isFavorite) {
+      const unlikedArr = data?.likes?.filter((el) => el !== uid);
+      updateCatLike({
+        id: catId as string,
+        catData: { likes: unlikedArr as string[] },
+      });
+    } else if (data?.likes?.includes(uid) === false) {
+      const likedArr = [...data?.likes, uid];
+      updateCatLike({ id: catId as string, catData: { likes: likedArr } });
+    }
+  };
 
   return (
     <>
@@ -30,7 +55,7 @@ function SingleCatPage() {
         <Loader />
       ) : (
         <div>
-          {data && !!data.title ? (
+          {!isLoading && data && !!data.title ? (
             <Content
               style={{
                 padding: '20px 50px',
@@ -47,13 +72,12 @@ function SingleCatPage() {
                 <Button
                   className="flexCenter"
                   icon={likeIcon}
-                  loading={false}
                   style={{
                     position: 'absolute',
                     top: 20,
                     right: 20,
                   }}
-                  onClick={() => setIsLiked((prev) => !prev)}
+                  onClick={handleUpdateLike}
                 />
                 <h1>{data?.brief}</h1>
                 <Image
