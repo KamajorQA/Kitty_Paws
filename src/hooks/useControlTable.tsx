@@ -3,13 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Image, Typography, theme } from 'antd';
 import { BiCopy } from 'react-icons/bi';
 import { BiSolidCopy } from 'react-icons/bi';
-import { FcLikePlaceholder } from 'react-icons/fc';
-import { FcLike } from 'react-icons/fc';
 
 import { IKittensDataArranged } from '../models/data';
-import { catsApi, useUpdateCatLikeMutation } from '../store/services/catsApi';
-
-import { useUserInfo } from './useUserInfo';
+import { catsApi } from '../store/services/catsApi';
+import { LikeButton } from '../components/LikeButton';
 
 import type { TableProps } from 'antd';
 import type { ColumnsType, SorterResult } from 'antd/es/table/interface';
@@ -26,25 +23,6 @@ function useControlTable() {
   >({});
 
   const navigate = useNavigate();
-
-  const { uid } = useUserInfo();
-  const [updateCatLike] = useUpdateCatLikeMutation();
-
-  const handleLike = (catInstance: IKittensDataArranged) => {
-    const likedArr = [...catInstance.likes, uid];
-    updateCatLike({
-      id: catInstance.id,
-      catData: { likes: likedArr },
-    });
-  };
-
-  const handleDislike = (catInstance: IKittensDataArranged) => {
-    const unlikedArr = catInstance.likes.filter((el) => el !== uid);
-    updateCatLike({
-      id: catInstance.id,
-      catData: { likes: unlikedArr },
-    });
-  };
 
   const handleTableChange: TableProps<IKittensDataArranged>['onChange'] = (
     pagination,
@@ -161,24 +139,9 @@ function useControlTable() {
     },
 
     {
-      title: 'Acttions',
-      key: 'actions',
-      render: (catInstance) =>
-        catInstance?.likes?.includes(uid) ? (
-          <Button
-            className="flexCenter"
-            icon={<FcLike />}
-            onClick={() => handleDislike(catInstance)}
-          />
-        ) : (
-          <Button
-            className="flexCenter"
-            icon={<FcLikePlaceholder />}
-            onClick={() => {
-              handleLike(catInstance);
-            }}
-          />
-        ),
+      title: 'Like',
+      key: 'like',
+      render: (catInstance) => <LikeButton catInstance={catInstance} />,
       responsive: ['xl'],
     },
   ];
