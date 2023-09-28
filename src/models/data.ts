@@ -1,14 +1,31 @@
-interface IKittensData {
-  id: string;
+interface INewCatData {
   title: string;
+  image?: string;
+  description: string;
+  brief: string;
+}
+
+interface INewCatDataArranged extends INewCatData {
   image: string;
   author: {
     uid: string;
     name: string;
   };
+  likes: string[] | [];
+}
+
+interface IKittensData extends INewCatDataArranged {
+  id: string;
   likes: string[];
-  description: string;
-  brief: string;
+  // title: string;
+  // image: string;
+  // author: {
+  //   uid: string;
+  //   name: string;
+  // };
+  // likes: string[];
+  // description: string;
+  // brief: string;
 }
 
 interface IKittensDataArranged extends IKittensData {
@@ -17,4 +34,9 @@ interface IKittensDataArranged extends IKittensData {
   charm: number;
 }
 
-export type { IKittensData, IKittensDataArranged };
+export type {
+  INewCatData,
+  IKittensData,
+  IKittensDataArranged,
+  INewCatDataArranged,
+};

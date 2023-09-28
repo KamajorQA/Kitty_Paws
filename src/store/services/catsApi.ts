@@ -1,8 +1,19 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
-import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+} from 'firebase/firestore';
 
-import { db } from '../../firebase';
-import { IKittensData, IKittensDataArranged } from '../../models/data';
+import { db, auth } from '../../firebase';
+import {
+  IKittensData,
+  IKittensDataArranged,
+  INewCatData,
+} from '../../models/data';
 
 export const catsApi = createApi({
   reducerPath: 'catsApi',
@@ -79,6 +90,25 @@ export const catsApi = createApi({
       },
       invalidatesTags: ['Cats'],
     }),
+    addNewCat: builder.mutation<string, INewCatData>({
+      async queryFn(values) {
+        try {
+          const catsCollectionRef = collection(db, 'cats');
+          await addDoc(catsCollectionRef, {
+            ...values,
+            author: {
+              name: auth.currentUser?.displayName,
+              uid: auth.currentUser?.uid,
+            },
+            likes: [],
+          });
+          return { data: 'ok' };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ['Cats'],
+    }),
   }),
 });
 
@@ -86,4 +116,5 @@ export const {
   useFetchCatsQuery,
   useFetchSingleCatQuery,
   useUpdateCatLikeMutation,
+  useAddNewCatMutation,
 } = catsApi;
