@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 
 import { db, auth } from '../../firebase';
@@ -109,6 +110,18 @@ export const catsApi = createApi({
       },
       invalidatesTags: ['Cats'],
     }),
+    deleteCat: builder.mutation<string, string>({
+      async queryFn(id) {
+        try {
+          const catDocRef = doc(db, 'cats', id);
+          await deleteDoc(catDocRef);
+          return { data: 'ok' };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ['Cats'],
+    }),
   }),
 });
 
@@ -117,4 +130,5 @@ export const {
   useFetchSingleCatQuery,
   useUpdateCatLikeMutation,
   useAddNewCatMutation,
+  useDeleteCatMutation,
 } = catsApi;

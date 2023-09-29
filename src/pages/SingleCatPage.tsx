@@ -7,9 +7,10 @@ import { FcLike } from 'react-icons/fc';
 
 import { useFetchSingleCatQuery } from '../store/services/catsApi';
 import { useUserInfo } from '../hooks/useUserInfo';
-import { TitleComponent } from '../components/Title';
-import { Loader } from '../components/Loader';
 import { useLike } from '../hooks/useLike';
+import { TitleComponent } from '../components/Title';
+import { DeleteButton } from '../components/DeleteButton';
+import { Loader } from '../components/Loader';
 
 import { NotFoundPage } from './NotFoundPage';
 
@@ -25,6 +26,8 @@ function SingleCatPage() {
     // которое получается от сервера и изначально всегда undefined. Нужна их синхронизация.
     /* eslint-disable react-hooks/exhaustive-deps*/
   }, [data, isLoading]);
+
+  const isCatOwner = data?.author.uid === uid;
 
   const { handleLike, isLoading: likeIsLoading } = useLike(
     isFavorite as boolean
@@ -85,7 +88,22 @@ function SingleCatPage() {
                 >
                   {data?.description}
                 </p>
-                <p>Owner: {data?.author?.name}</p>
+                <div
+                  className="flexCenter"
+                  style={{
+                    width: '100%',
+                  }}
+                >
+                  <p
+                    style={{
+                      flex: 1,
+                      textAlign: 'center',
+                    }}
+                  >
+                    Owner: {data?.author?.name}
+                  </p>
+                  {isCatOwner && <DeleteButton catId={data.id} />}
+                </div>
               </section>
             </Content>
           ) : (
