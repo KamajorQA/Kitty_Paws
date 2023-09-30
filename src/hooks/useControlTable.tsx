@@ -8,10 +8,13 @@ import { IKittensDataArranged } from '../models/data';
 import { catsApi } from '../store/services/catsApi';
 import { LikeButton } from '../components/LikeButton';
 
+import { useSearch } from './useSearch';
+
 import type { TableProps } from 'antd';
 import type { ColumnsType, SorterResult } from 'antd/es/table/interface';
 
 function useControlTable() {
+  const { getColumnSearchProps } = useSearch();
   const {
     token: { colorPrimaryHover, colorBgLayout },
   } = theme.useToken();
@@ -48,6 +51,7 @@ function useControlTable() {
       title: "Kitty's Name",
       dataIndex: 'title',
       key: 'name',
+      ...getColumnSearchProps('title'),
       render: (text, row) => (
         <Typography.Text
           strong
@@ -65,6 +69,8 @@ function useControlTable() {
       title: 'Characteristics',
       dataIndex: 'brief',
       key: 'brief',
+      ...getColumnSearchProps('brief'),
+
       render: (text) => (
         <Typography.Text
           copyable={{
@@ -98,6 +104,8 @@ function useControlTable() {
       title: 'Description',
       dataIndex: 'description',
       key: 'description',
+      ...getColumnSearchProps('description'),
+
       render: (text) => (
         <Typography.Paragraph
           ellipsis={{ tooltip: 'Full info is in detailed Bio' }}
