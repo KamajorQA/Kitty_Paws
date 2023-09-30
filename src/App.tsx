@@ -9,6 +9,7 @@ import { ContactsPage } from './pages/ContactsPage';
 import { LoginPage } from './pages/LoginPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import './App.css';
+import { FavoritePage } from './pages/FavoritePage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<MainLayout />}>
             <Route index element={<HomePage />} />
             <Route path="cats/:catId" element={<SingleCatPage />} />
+            <Route path="favorites" element={<FavoritePage />} />
             <Route path="newcat" element={<CreateCatPage />} />
             <Route path="contacts" element={<ContactsPage />} />
             <Route path="*" element={<NotFoundPage />} />
