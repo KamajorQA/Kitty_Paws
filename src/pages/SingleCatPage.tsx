@@ -12,7 +12,7 @@ import { TitleComponent } from '../components/Title';
 import { DeleteButton } from '../components/DeleteButton';
 import { Loader } from '../components/Loader';
 
-import { NotFoundPage } from './NotFoundPage';
+import NotFoundPage from './NotFoundPage';
 
 function SingleCatPage() {
   const { uid } = useUserInfo();
@@ -115,4 +115,4 @@ function SingleCatPage() {
   );
 }
 
-export { SingleCatPage };
+export default SingleCatPage;

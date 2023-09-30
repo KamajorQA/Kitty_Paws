@@ -24,4 +24,4 @@ function CreateCatPage() {
   );
 }
 
-export { CreateCatPage };
+export default CreateCatPage;

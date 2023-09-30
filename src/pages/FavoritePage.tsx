@@ -37,4 +37,4 @@ function FavoritePage() {
   );
 }
 
-export { FavoritePage };
+export default FavoritePage;

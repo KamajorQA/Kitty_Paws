@@ -56,4 +56,4 @@ function ContactsPage() {
   );
 }
 
-export { ContactsPage };
+export default ContactsPage;

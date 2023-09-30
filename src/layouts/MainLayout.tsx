@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Layout } from 'antd';
 
@@ -21,8 +22,9 @@ function MainLayout() {
         <>
           <Layout>
             <HeaderComponent />
-
-            <Outlet />
+            <Suspense fallback={<Loader />}>
+              <Outlet />
+            </Suspense>
           </Layout>
 
           <SiderComponent />
