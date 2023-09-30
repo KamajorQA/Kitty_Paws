@@ -21,7 +21,7 @@ function CatsTable() {
         pagination={{
           position: ['bottomCenter'],
           hideOnSinglePage: true,
-          pageSize: 3,
+          pageSize: 5,
         }}
       />
     </>

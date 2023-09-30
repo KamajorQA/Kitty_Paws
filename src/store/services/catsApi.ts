@@ -6,6 +6,9 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  deleteDoc,
+  query,
+  where,
 } from 'firebase/firestore';
 
 import { db, auth } from '../../firebase';
@@ -14,6 +17,8 @@ import {
   IKittensDataArranged,
   INewCatData,
 } from '../../models/data';
+
+const catsCollectionRef = collection(db, 'cats');
 
 export const catsApi = createApi({
   reducerPath: 'catsApi',
@@ -28,7 +33,6 @@ export const catsApi = createApi({
     fetchCats: builder.query<IKittensDataArranged[], void>({
       // а с fakeBaseQuery вместо простого получения query использую queryFn
       async queryFn() {
-        const catsCollectionRef = collection(db, 'cats');
         const catsQuerySnaphot = await getDocs(catsCollectionRef);
         const posts = catsQuerySnaphot.docs.map((document) => ({
           // typescript не видит структуру при краткой деструктуризации а-ля...document.data(),
@@ -75,6 +79,26 @@ export const catsApi = createApi({
       },
       providesTags: ['Cats'],
     }),
+    fetchFavorites: builder.query<IKittensData[], void>({
+      async queryFn() {
+        try {
+          const q = query(
+            catsCollectionRef,
+            where('likes', 'array-contains', auth.currentUser?.uid)
+          );
+          const favoritesQuerySnaphot = await getDocs(q);
+          const favoritesArray = favoritesQuerySnaphot.docs.map((document) => ({
+            ...document.data(),
+            id: document.id,
+          }));
+
+          return { data: favoritesArray as IKittensData[] };
+        } catch (error) {
+          return { error };
+        }
+      },
+      providesTags: ['Cats'],
+    }),
     updateCatLike: builder.mutation<
       string,
       { id: string; catData: { likes: string[] } }
@@ -93,7 +117,6 @@ export const catsApi = createApi({
     addNewCat: builder.mutation<string, INewCatData>({
       async queryFn(values) {
         try {
-          const catsCollectionRef = collection(db, 'cats');
           await addDoc(catsCollectionRef, {
             ...values,
             author: {
@@ -109,6 +132,18 @@ export const catsApi = createApi({
       },
       invalidatesTags: ['Cats'],
     }),
+    deleteCat: builder.mutation<string, string>({
+      async queryFn(id) {
+        try {
+          const catDocRef = doc(db, 'cats', id);
+          await deleteDoc(catDocRef);
+          return { data: 'ok' };
+        } catch (error) {
+          return { error };
+        }
+      },
+      invalidatesTags: ['Cats'],
+    }),
   }),
 });
 
@@ -117,4 +152,6 @@ export const {
   useFetchSingleCatQuery,
   useUpdateCatLikeMutation,
   useAddNewCatMutation,
+  useDeleteCatMutation,
+  useFetchFavoritesQuery,
 } = catsApi;

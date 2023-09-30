@@ -17,15 +17,6 @@ interface INewCatDataArranged extends INewCatData {
 interface IKittensData extends INewCatDataArranged {
   id: string;
   likes: string[];
-  // title: string;
-  // image: string;
-  // author: {
-  //   uid: string;
-  //   name: string;
-  // };
-  // likes: string[];
-  // description: string;
-  // brief: string;
 }
 
 interface IKittensDataArranged extends IKittensData {
