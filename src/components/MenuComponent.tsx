@@ -1,8 +1,9 @@
 import { Menu } from 'antd';
-import { RiContactsFill } from 'react-icons/ri';
-import { LuCat } from 'react-icons/lu';
-import { MdFavoriteBorder } from 'react-icons/md';
 import { FaPaw } from 'react-icons/fa';
+import { LuCat } from 'react-icons/lu';
+import { LiaUserCircle } from 'react-icons/lia';
+import { MdFavoriteBorder } from 'react-icons/md';
+import { LiaMailBulkSolid } from 'react-icons/lia';
 
 import { useControlNavigation } from '../hooks/useControlNavigation';
 
@@ -26,6 +27,11 @@ function MenuComponent() {
           icon: <MdFavoriteBorder />,
         },
         {
+          key: 'userinfo',
+          label: 'User info',
+          icon: <LiaUserCircle />,
+        },
+        {
           key: 'newcat',
           label: 'Add Your Cat',
           icon: <LuCat />,
@@ -33,7 +39,7 @@ function MenuComponent() {
         {
           key: 'contacts',
           label: 'Contacts',
-          icon: <RiContactsFill />,
+          icon: <LiaMailBulkSolid />,
         },
       ]}
       onClick={goToChosenPage}

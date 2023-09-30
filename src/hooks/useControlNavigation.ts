@@ -19,6 +19,8 @@ function useControlNavigation() {
         return ['contacts'];
       case '/favorites':
         return ['favorites'];
+      case '/userinfo':
+        return ['userinfo'];
       case '/newcat':
         return ['newcat'];
       default:
